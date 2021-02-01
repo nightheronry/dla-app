@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+
+  backend:
+    image: 10.0.4.58:5000/dla_flask:publaynet_mrcnn
+    container_name: dla_backend
+    hostname: dla_flask
+
+    build:
+      context: backend
+      dockerfile: Dockerfile
+
+    environment: 
+      FLASK_APP: dla.py
+      FLASK_ENV: production
+      APP_SETTINGS: project.config.ProductionConfig
+
+    ports:
+      - 5000:5000
+
+  frontend:
+    image: 10.0.4.58:5000/dla_react
+    container_name: dla_frontend
+    hostname: dla_react
+
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    
+    ports:
+      - 3000:3000
+    stdin_open: true
+    depends_on: 
+      - backend
